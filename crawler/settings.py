@@ -112,8 +112,8 @@ MONGODB_COLLECTION = "default"
 CONNECTION_STRING = "{drivername}://{user}:{passwd}@{host}:{port}/{db_name}?charset=utf8".format(
     drivername="mysql",
     user="root",
-    passwd="123456",
-    host="demo.niracler.com",
-    port="3307",
-    db_name="movie_db",
+    passwd="dgutdev#",
+    host="music-01.niracler.com",
+    port="3306",
+    db_name="music_db",
 )

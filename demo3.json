@@ -1,0 +1,43 @@
+{
+  "data": [
+    {
+      "id": 33894312,
+      "url": "http://m7.music.126.net/20191118102225/20d428a33d5aa720c4d0de59a2bc035a/ymusic/0fd6/4f65/43ed/a8772889f38dfcb91c04da915b301617.mp3",
+      "br": 320000,
+      "size": 10691439,
+      "md5": "a8772889f38dfcb91c04da915b301617",
+      "code": 200,
+      "expi": 1200,
+      "type": "mp3",
+      "gain": 0,
+      "fee": 0,
+      "uf": null,
+      "payed": 0,
+      "flag": 128,
+      "canExtend": false,
+      "freeTrialInfo": null,
+      "level": "exhigh",
+      "encodeType": "mp3"
+    },
+    {
+      "id": 405998841,
+      "url": "http://m7.music.126.net/20191118102225/07a72b7b6b43e9da1466b1b635c1530e/ymusic/f3fb/235e/a216/2f95cb16b58562445a95eadda702952d.mp3",
+      "br": 128000,
+      "size": 5558901,
+      "md5": "2f95cb16b58562445a95eadda702952d",
+      "code": 200,
+      "expi": 1200,
+      "type": "mp3",
+      "gain": 0,
+      "fee": 8,
+      "uf": null,
+      "payed": 0,
+      "flag": 4,
+      "canExtend": false,
+      "freeTrialInfo": null,
+      "level": "standard",
+      "encodeType": "mp3"
+    }
+  ],
+  "code": 200
+}

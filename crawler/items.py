@@ -8,6 +8,16 @@
 import scrapy
 
 
+class MusicListItem(scrapy.Item):
+    name = scrapy.Field()  # 歌单名称
+    description = scrapy.Field()  # 歌单描述
+
+
+class MusicItem(scrapy.Item):
+    name = scrapy.Field()  # 歌曲名称
+    url = scrapy.Field()  # 歌曲文件链接
+
+
 class MovieItem(scrapy.Item):
     ranking = scrapy.Field()  # 排名
     mid = scrapy.Field()  # ID
