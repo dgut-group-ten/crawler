@@ -29,8 +29,8 @@ class MusicList(DeclarativeBase):
 
 
 class Music(DeclarativeBase):
-    __tablename__ = "t_music"
-    mid = Column('mid', Integer, primary_key=True)
+    __tablename__ = "t_song"
+    sid = Column('sid', Integer, primary_key=True)
     name = Column('name', String(128))  # 歌曲名称
     url = Column('url', String(256))  # 歌曲文件链接
     created = Column('created', DateTime(), default=datetime.datetime.utcnow)

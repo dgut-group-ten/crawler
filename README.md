@@ -1,5 +1,5 @@
 # crawler
-> 毕业设计的爬虫模块, 琉璃神社爬虫， 新浪微博爬虫, 等后续是面向于游戏方面的资讯
+> 
 
 ## 如何团队项目保持同步(重要)
 
@@ -32,70 +32,6 @@ pip install -r requirements.txt
 scrapy crawl shenshe
 ```
 
-## 爬虫设计
-
-### 新闻对象  
-
-|Key|Value|  
-|:---:|:---:|  
-|website|网站的名称|
-|url|文章链接|
-|title|文章内容|
-|content|文章内容|
-|category|文章类型|
-|publish_time|发布时间|
-
-### 新浪微博爬虫设计
-
-> 像是新浪微博这样的，是账号越多越好
-
-1. 先爬取个人信息
-2. 将这个人所关注的人也加到待爬序列中
-
-微博用户(放在redis的List里面)
-
-|Key|Value|
-|:---:|:---:|
-|user_id|用户ID|
-|nickname|用户昵称；|
-|weibo_num|微博数；|
-|following|关注数；|
-|followers|粉丝数；|
-
-关系网络(放在redis的List里面)
-
-|Key|Value|
-|:---:|:---:|
-|user_id|用户ID|
-|follow_id|他关注的用户ID|
-
-微博内容(放在redis的List里面)
-
-|Key|Value|
-|:---:|:---:|
-|user_id|用户ID|
-|weibo_content|存储用户的所有微博|
-|weibo_place|存储微博的发布位置|
-|publish_time| 存储微博的发布时间|
-|up_num|存储微博获得的点赞数|
-|retweet_num|存储微博获得的转发数|
-|comment_num|存储微博获得的评论数|
-|publish_tool|存储微博的发布工具|
-
-## 待爬取网站
-
- - [x] 17173 https://www.17173.com/
- - [x] 巴哈姆特電玩資訊站 https://www.gamer.com.tw/
- - [ ] 3dmgame https://www.3dmgame.com/news/
- - [ ] 电玩巴士 https://www.tgbus.com/
- - [ ] 游侠网 https://www.ali213.net/
- - [ ] 游民星空 https://www.gamersky.com/news/
- - [ ] 机核网 https://www.gcores.com/news
- - [ ] 漫资讯 https://www.dongmanzx.com/
- - [ ] acg批评 http://www.acgpiping.net/
- - [ ] 半次元 https://bcy.net/
- - [ ] 果壳网 https://www.guokr.com/scientific/
- - [ ] 178网游 http://www.178.com/
 
 ### 打包命令
 ```bash

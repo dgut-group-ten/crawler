@@ -36,7 +36,7 @@ class MusicSpider(scrapy.Spider):
             music_list_item['description'] = playlist['description']
 
             url = self.base_url + api.format(playlists_id=playlist['id'])
-            yield music_list_item
+            # yield music_list_item
             yield scrapy.Request(url, callback=self.parse_playlist)
 
     def parse_playlist(self, response):
