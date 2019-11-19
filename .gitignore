@@ -114,3 +114,4 @@ cookie.json
 *.csv
 
 media/
+tmp/

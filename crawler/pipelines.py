@@ -4,6 +4,8 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
+import os
+import uuid
 
 import pymongo
 import requests
@@ -15,7 +17,45 @@ from .items import MusicItem, MusicListItem
 from crawler.tool import sftp_upload
 
 
-class CrawlerPipeline(object):
+class SongPipeline(object):
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36',
+        'Upgrade-Insecure-Requests': '1',
+    }
+
+    cookies = {
+        'MUSIC_U': '57c8ae96cd9b39c040d202796af65095e20f265fe0331c2e4ebc806beab2e4306ff9017ffeaf64b87220854add29623541049cea1c6bb9b6',
+        '__csrf': 'a2f3983c5c848b7638c7dfbc3a2fd536',
+        '__remember_me': 'true',
+    }
+
+    def process_item(self, item, spider):
+
+        if isinstance(item, MusicItem) and item['url']:
+            music = Music()
+            music.name = item['name']
+            music.url = item['url']
+
+            ext = item['url'].split('.')[-1]
+            new_filename = uuid.uuid4().hex + '.' + ext
+            with open('tmp/' + new_filename, 'wb') as f:
+                f.write(requests.get(url=item['url'], headers=self.headers).content)
+
+            url = "https://music-02.niracler.com:8000/song/"
+            data = {
+                "name": item['name'],
+            }
+            try:
+                files = {'file': open('tmp/' + new_filename, 'rb')}
+                r = requests.post(url, files=files, data=data, cookies=self.cookies)
+                print(r.text)
+            except Exception as e:
+                print("here " + str(e))
+
+        return item
+
+
+class CrawlPipeline(object):
     def process_item(self, item, spider):
         return item
 

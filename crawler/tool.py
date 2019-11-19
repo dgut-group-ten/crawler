@@ -2,6 +2,7 @@ import os
 import uuid
 
 import paramiko
+import requests
 
 
 def random_filename(filename):
@@ -23,3 +24,4 @@ def sftp_upload(host, port, username, password, local, remote):
     except Exception as e:
         print('upload exception:', e)
     sf.close()
+

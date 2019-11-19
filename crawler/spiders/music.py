@@ -14,10 +14,11 @@ class MusicSpider(scrapy.Spider):
 
     custom_settings = {
         'ITEM_PIPELINES': {
-            'crawler.pipelines.MusicPipeline': 200,
-            'crawler.pipelines.CrawlerPipeline': 300,
+            'crawler.pipelines.SongPipeline': 200,
+            # 'crawler.pipelines.MusicPipeline': 200,
+            # 'crawler.pipelines.CrawlerPipeline': 300,
         },
-        'DOWNLOAD_DELAY': 0,
+        'DOWNLOAD_DELAY': 1,
     }
 
     def parse(self, response):
