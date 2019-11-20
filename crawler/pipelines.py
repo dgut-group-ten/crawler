@@ -48,6 +48,7 @@ class SongPipeline(object):
             try:
                 files = {'file': open('tmp/' + new_filename, 'rb')}
                 r = requests.post(url, files=files, data=data, cookies=self.cookies)
+                os.remove('tmp/' + new_filename)
                 print(r.text)
             except Exception as e:
                 print("here " + str(e))
