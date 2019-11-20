@@ -32,10 +32,27 @@ class SongPipeline(object):
     def process_item(self, item, spider):
 
         if isinstance(item, MusicItem) and item['url']:
+
             music = Music()
             music.name = item['name']
             music.url = item['url']
 
+            author_list = []
+
+            # 添加作者
+            for author in item['author']:
+                url = "https://music-02.niracler.com:8000/author/"
+                data = {
+                    "name": author['name'],
+                }
+                try:
+                    r = requests.post(url, data=data, cookies=self.cookies).json()
+                    print(r)
+                    author_list.append(r['aid'])
+                except Exception as e:
+                    print("here " + str(e))
+
+            # 上传文件
             ext = item['url'].split('.')[-1]
             new_filename = uuid.uuid4().hex + '.' + ext
             with open('tmp/' + new_filename, 'wb') as f:
@@ -44,19 +61,20 @@ class SongPipeline(object):
             url = "https://music-02.niracler.com:8000/song/"
             data = {
                 "name": item['name'],
+                "authors": author_list,
             }
             try:
                 files = {'file': open('tmp/' + new_filename, 'rb')}
                 r = requests.post(url, files=files, data=data, cookies=self.cookies)
                 os.remove('tmp/' + new_filename)
-                print(r.text)
+                print(r.json())
             except Exception as e:
-                print("here " + str(e))
+                print(str(e))
 
         return item
 
 
-class CrawlPipeline(object):
+class CrawlerPipeline(object):
     def process_item(self, item, spider):
         return item
 

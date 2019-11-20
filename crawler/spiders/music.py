@@ -52,6 +52,7 @@ class MusicSpider(scrapy.Spider):
         for music in tracks:
             music_item = MusicItem()
             music_item['name'] = music['name']
+            music_item['author'] = music['ar']
             url = self.base_url + api.format(m_id=music['id'])
             yield scrapy.Request(url, callback=self.parse_music, meta={'music_item': music_item})
 

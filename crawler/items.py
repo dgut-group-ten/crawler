@@ -16,4 +16,4 @@ class MusicListItem(scrapy.Item):
 class MusicItem(scrapy.Item):
     name = scrapy.Field()  # 歌曲名称
     url = scrapy.Field()  # 歌曲文件链接
-
+    author = scrapy.Field()  # 歌曲作者
