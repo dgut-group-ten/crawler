@@ -10,32 +10,37 @@ import uuid
 import pymongo
 import requests
 
-from sqlalchemy.orm import sessionmaker
-from .models import db_connect, create_table, Music, MusicList
 from .items import MusicItem, MusicListItem
 
 from crawler.tool import sftp_upload
 
 
+class PlayListPipeline(object):
+    def process_item(self, item, spider):
+
+        if isinstance(item, MusicListItem):
+            url = "https://music-02.niracler.com:8000/playlist/"
+            data = {
+                "lid": item['lid'],
+                "name": item['name'],
+                'stags': ' '.join(item['tags']),
+                "description": item['description'],
+            }
+            print(data)
+
+            try:
+                r = requests.post(url, data=data)
+                print(r.text)
+            except Exception as e:
+                print(str(e))
+
+        return item
+
+
 class SongPipeline(object):
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36',
-        'Upgrade-Insecure-Requests': '1',
-    }
-
-    cookies = {
-        'MUSIC_U': '57c8ae96cd9b39c040d202796af65095e20f265fe0331c2e4ebc806beab2e4306ff9017ffeaf64b87220854add29623541049cea1c6bb9b6',
-        '__csrf': 'a2f3983c5c848b7638c7dfbc3a2fd536',
-        '__remember_me': 'true',
-    }
-
     def process_item(self, item, spider):
 
         if isinstance(item, MusicItem) and item['url']:
-
-            music = Music()
-            music.name = item['name']
-            music.url = item['url']
 
             author_list = []
 
@@ -43,30 +48,35 @@ class SongPipeline(object):
             for author in item['author']:
                 url = "https://music-02.niracler.com:8000/author/"
                 data = {
-                    "name": author['name'],
+                    "aid": author['id'] if author['id'] else 1,
+                    "name": author['name'] if author['id'] else '神秘歌手(没有ID)',
                 }
                 try:
-                    r = requests.post(url, data=data, cookies=self.cookies).json()
+                    r = requests.post(url, data=data).json()
                     print(r)
-                    author_list.append(r['aid'])
+                    author_list.append(data['aid'])
                 except Exception as e:
-                    print("here " + str(e))
+                    print("作者创建有问题：" + str(e))
 
             # 上传文件
             ext = item['url'].split('.')[-1]
             new_filename = uuid.uuid4().hex + '.' + ext
             with open('tmp/' + new_filename, 'wb') as f:
-                f.write(requests.get(url=item['url'], headers=self.headers).content)
+                f.write(requests.get(url=item['url']).content)
 
             url = "https://music-02.niracler.com:8000/song/"
+            url2 = "https://music-02.niracler.com:8000/playlist/" + str(item['lid']) + '/'
             data = {
+                "sid": item['sid'],
                 "name": item['name'],
                 "authors": author_list,
             }
             try:
                 files = {'file': open('tmp/' + new_filename, 'rb')}
-                r = requests.post(url, files=files, data=data, cookies=self.cookies)
+                r = requests.post(url, files=files, data=data)
                 os.remove('tmp/' + new_filename)
+                print(r.json())
+                r = requests.put(url2, data={'tracks': [item['sid']]})
                 print(r.json())
             except Exception as e:
                 print(str(e))
@@ -76,46 +86,6 @@ class SongPipeline(object):
 
 class CrawlerPipeline(object):
     def process_item(self, item, spider):
-        return item
-
-
-class MusicPipeline(object):
-    def __init__(self):
-        """
-        Initializes database connection and sessionmaker.
-        Creates deals table.
-        """
-        engine = db_connect()
-        create_table(engine)
-        self.Session = sessionmaker(bind=engine)
-
-    def process_item(self, item, spider):
-        """
-        Save deals in the database.
-        This method is called for every item pipeline component.
-        """
-        session = self.Session()
-
-        if isinstance(item, MusicItem):
-            music = Music()
-            music.name = item['name']
-            music.url = item['url']
-            someone = music
-        else:
-            music_list = MusicList()
-            music_list.name = item['name']
-            music_list.description = item['description']
-            someone = music_list
-
-        try:
-            session.add(someone)
-            session.commit()
-        except:
-            session.rollback()
-            raise
-        finally:
-            session.close()
-
         return item
 
 

@@ -9,11 +9,16 @@ import scrapy
 
 
 class MusicListItem(scrapy.Item):
+    lid = scrapy.Field()  # 歌单ID
     name = scrapy.Field()  # 歌单名称
     description = scrapy.Field()  # 歌单描述
+    tags = scrapy.Field()  # 歌单标签
+    tracks = scrapy.Field()  # 歌单列表
 
 
 class MusicItem(scrapy.Item):
+    lid = scrapy.Field()
+    sid = scrapy.Field()
     name = scrapy.Field()  # 歌曲名称
     url = scrapy.Field()  # 歌曲文件链接
     author = scrapy.Field()  # 歌曲作者
