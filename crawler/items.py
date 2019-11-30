@@ -8,6 +8,11 @@
 import scrapy
 
 
+class ImgItem(scrapy.Item):
+    id = scrapy.Field()
+    url = scrapy.Field()
+
+
 class MusicListItem(scrapy.Item):
     lid = scrapy.Field()  # 歌单ID
     name = scrapy.Field()  # 歌单名称

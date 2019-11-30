@@ -15,6 +15,29 @@ from .items import MusicItem, MusicListItem
 from crawler.tool import sftp_upload
 
 
+class CoverImagePipeline(object):
+    def process_item(self, item, spider):
+        ext = item['url'].split('.')[-1]
+        new_filename = uuid.uuid4().hex + '.' + ext
+        with open('tmp/' + new_filename, 'wb') as f:
+            f.write(requests.get(url=item['url']).content)
+
+        headers = {
+            "Token": 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsIndlYiI6Imdyb3VwdGVuIiwiZXhwIjoxNTc1NzEwMzgxLCJpYXQiOjE1NzUxMDU1ODF9._8tPWLBIb_CcYzJoAthkmCt8GP-Upm8plPW7BsA_3s0'
+        }
+
+        url = "https://music-02.niracler.com:8000/playlist/" + str(item['id']) + '/'
+        try:
+            files = {'cimg': open('tmp/' + new_filename, 'rb')}
+            r = requests.patch(url, files=files, headers=headers)
+            os.remove('tmp/' + new_filename)
+            print(r.text)
+        except Exception as e:
+            print(str(e))
+
+        return item
+
+
 class PlayListPipeline(object):
     def process_item(self, item, spider):
 
@@ -55,6 +78,7 @@ class SongPipeline(object):
                     r = requests.post(url, data=data).json()
                     print(r)
                     author_list.append(data['aid'])
+                    print(author_list)
                 except Exception as e:
                     print("作者创建有问题：" + str(e))
 
@@ -75,9 +99,9 @@ class SongPipeline(object):
                 files = {'file': open('tmp/' + new_filename, 'rb')}
                 r = requests.post(url, files=files, data=data)
                 os.remove('tmp/' + new_filename)
-                print(r.json())
+                print(r.text)
                 r = requests.put(url2, data={'tracks': [item['sid']]})
-                print(r.json())
+                print(r.text)
             except Exception as e:
                 print(str(e))
 
