@@ -8,6 +8,12 @@
 import scrapy
 
 
+class SongDetailItem(scrapy.Item):
+    id = scrapy.Field()
+    cover_url = scrapy.Field()
+    cover_name = scrapy.Field()
+
+
 class ImgItem(scrapy.Item):
     id = scrapy.Field()
     url = scrapy.Field()

@@ -38,6 +38,29 @@ class CoverImagePipeline(object):
         return item
 
 
+class SongDetailPipeline(object):
+    def process_item(self, item, spider):
+        ext = item['cover_url'].split('.')[-1]
+        new_filename = uuid.uuid4().hex + '.' + ext
+        with open('tmp/' + new_filename, 'wb') as f:
+            f.write(requests.get(url=item['cover_url']).content)
+
+        headers = {
+            "Token": 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjI1LCJ3ZWIiOiJncm91cHRlbiIsIm5hbWUiOiJyb290IiwiaXNBZG1pbiI6ZmFsc2UsImV4cCI6MTU3NjEzMjg3MywiaWF0IjoxNTc1NTI4MDczfQ.Vo-uGd4wVadUvKEI27WSGQ68Gj_XuVVy-2IR_LuNZ6o'
+        }
+
+        url = "https://music-01.niracler.com:8002/song/" + str(item['id']) + '/'
+        try:
+            files = {'cimg': open('tmp/' + new_filename, 'rb')}
+            r = requests.patch(url, files=files, headers=headers)
+            os.remove('tmp/' + new_filename)
+            print(r.text)
+        except Exception as e:
+            print(str(e))
+
+        return item
+
+
 class PlayListPipeline(object):
     def process_item(self, item, spider):
 
