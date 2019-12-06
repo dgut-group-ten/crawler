@@ -2,7 +2,7 @@ import scrapy
 import json
 
 from crawler.items import ImgItem, SongDetailItem
-from crawler.spiders.song_id import SONG_LIST
+from crawler.spiders.song_id import SONG_LIST, OTHER
 
 
 class SongDetailSpider(scrapy.Spider):
@@ -13,7 +13,7 @@ class SongDetailSpider(scrapy.Spider):
 
     def __init__(self):
         super().__init__()
-        for sid in SONG_LIST.split('\n'):
+        for sid in OTHER.split('\n'):
             self.start_urls.append(self.base_url + sid)
 
     headers = {
