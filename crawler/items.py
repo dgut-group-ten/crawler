@@ -12,6 +12,7 @@ class SongDetailItem(scrapy.Item):
     id = scrapy.Field()
     cover_url = scrapy.Field()
     cover_name = scrapy.Field()
+    lyric = scrapy.Field()
 
 
 class ImgItem(scrapy.Item):

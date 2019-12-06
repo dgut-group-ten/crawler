@@ -15,6 +15,24 @@ from .items import MusicItem, MusicListItem
 from crawler.tool import sftp_upload
 
 
+class LyricPipeline(object):
+    def process_item(self, item, spider):
+
+        headers = {
+            "Token": 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjI1LCJ3ZWIiOiJncm91cHRlbiIsIm5hbWUiOiJyb290IiwiaXNBZG1pbiI6ZmFsc2UsImV4cCI6MTU3NjEzMjg3MywiaWF0IjoxNTc1NTI4MDczfQ.Vo-uGd4wVadUvKEI27WSGQ68Gj_XuVVy-2IR_LuNZ6o'
+        }
+
+        url = "https://music-01.niracler.com:8002/song/" + str(item['id']) + '/'
+        try:
+            data = {'lyric': item['lyric']}
+            r = requests.patch(url, data=data, headers=headers)
+            print(r.text)
+        except Exception as e:
+            print(str(e))
+
+        return item
+
+
 class CoverImagePipeline(object):
     def process_item(self, item, spider):
         ext = item['url'].split('.')[-1]
