@@ -1,6 +1,10 @@
 # crawler
 > 
 
+## 后台启动
+
+
+
 ## 如何团队项目保持同步(重要)
 
 - 第一次时需要,与团队仓库建立联系
@@ -59,3 +63,5 @@ $ tar -czvf crawler.tar.gz  --exclude=crawler/venv --exclude=crawler/media --exc
 - [使用 privoxy 转发 socks 到 http ](http://einverne.github.io/post/2018/03/privoxy-forward-socks-to-http.html)
 - [Make Scrapy work with socket proxy](https://blog.michaelyin.info/scrapy-socket-proxy/)
 - [Python向redis批量插入数据](https://my.oschina.net/tigerBin/blog/1842895)
+- [linux查看磁盘使用情况命令](https://blog.csdn.net/achenyuan/article/details/78674102)
+- [What Is Nohup and How Do You Use It?](https://www.maketecheasier.com/nohup-and-uses/)
