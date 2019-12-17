@@ -103,6 +103,7 @@ class SongPipeline(object):
                 "name": item['name'],
                 "authors": author_list,
                 'lyric': item['lyric'],
+                'area': item['area']
             }
 
             song_url = "https://music-01.niracler.com:8002/song/"
@@ -126,3 +127,20 @@ class SongPipeline(object):
 class CrawlerPipeline(object):
     def process_item(self, item, spider):
         return item
+
+
+class FixSongAreaPipeline(object):
+    def process_item(self, item, spider):
+        if isinstance(item, SongItem) and item['area'] != '未知':
+            data = {
+                'area': item['area']
+            }
+
+            try:
+                song_url = "https://music-01.niracler.com:8002/song/" + str(item['sid']) + '/'
+                r = requests.patch(song_url, headers=headers, data=data).json()
+                print(r)
+            except Exception as e:
+                print(str(e))
+
+            return item

@@ -1,20 +1,21 @@
 import scrapy
 import json
 
-from crawler.items import PlaylistItem, SongItem
+from .id import PLAYLIST_ID
+from crawler.items import SongItem
 
 
 class PlaylistSpider(scrapy.Spider):
     """爬取歌单的爬虫"""
-    name = 'playlist'
+    name = 'fix_playlist'
     allowed_domains = ['music-01.niracler.com']
     base_url = 'https://music-01.niracler.com:8003'
     start_urls = []
 
-    def __init__(self, keyword=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if keyword:
-            self.start_urls.append(self.base_url + "/search?type=1018&keywords=" + keyword)
+        for playlist_id in PLAYLIST_ID.split('\n'):
+            self.start_urls.append(self.base_url + '/playlist/detail?id=' + playlist_id)
 
     # 一些简单配置
     cookies = {
@@ -28,43 +29,31 @@ class PlaylistSpider(scrapy.Spider):
     }
     custom_settings = {
         'ITEM_PIPELINES': {
-            'crawler.pipelines.PlaylistPipeline': 200,
-            'crawler.pipelines.SongPipeline': 200,
+            # 'crawler.pipelines.PlaylistPipeline': 200,
+            'crawler.pipelines.FixSongAreaPipeline': 200,
             # 'crawler.pipelines.CrawlerPipeline': 300,
         },
-        'DOWNLOAD_DELAY': 0,
+        'DOWNLOAD_DELAY': 0.01,
     }
 
     def start_requests(self):
         for url in self.start_urls:
-            yield scrapy.Request(url=url, cookies=self.cookies, headers=self.headers)
-
-    def parse(self, response):
-        search = json.loads(response.text)
-        for playlist_id in search['result']['playList']['resourceIds']:
-            url = self.base_url + '/playlist/detail?id=' + str(playlist_id)
             yield scrapy.Request(url=url, callback=self.parse_playlist, cookies=self.cookies, headers=self.headers)
 
     def parse_playlist(self, response):
         music_data = json.loads(response.text)
         playlist = music_data['playlist']
 
-        playlist_item = PlaylistItem()
-        playlist_item['lid'] = response.url.split('=')[-1]
-        playlist_item['name'] = playlist['name']
-        playlist_item['description'] = playlist['description']
-        playlist_item['stags'] = " ".join(playlist['tags'])
-        playlist_item['cover_url'] = playlist['coverImgUrl']
-
-        yield playlist_item
-        api = "/song/url?id={sid}"
-        lid = playlist_item['lid']
+        lid = response.url.split('=')[-1]
         area_list = ["华语", "欧美", "日语", "韩语", "粤语", "英伦", "拉丁"]
         area = '未知'
         for i in playlist['tags']:
             if i in area_list:
                 area = i
+                print(area)
                 break
+
+        api = "/song/url?id={sid}"
 
         for song in playlist['tracks']:
             song_item = SongItem()
@@ -74,8 +63,9 @@ class PlaylistSpider(scrapy.Spider):
             song_item['author'] = song['ar']
             song_item['cover_url'] = song['al']['picUrl']
             song_item['area'] = area
-            url = self.base_url + api.format(sid=song_item['sid'])
-            yield scrapy.Request(url, callback=self.parse_song, meta={'song_item': song_item})
+            # url = self.base_url + api.format(sid=song_item['sid'])
+            yield song_item
+            # yield scrapy.Request(url, callback=self.parse_song, meta={'song_item': song_item})
 
     def parse_song(self, response):
         """

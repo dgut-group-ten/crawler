@@ -14,6 +14,7 @@ class SongItem(scrapy.Item):
     name = scrapy.Field()  # 歌曲名称
     url = scrapy.Field()  # 歌曲文件链接
     author = scrapy.Field()  # 歌曲作者
+    area = scrapy.Field()  # 地区
     cover_url = scrapy.Field()
     lyric = scrapy.Field()
 
