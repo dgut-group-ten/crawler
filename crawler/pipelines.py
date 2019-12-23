@@ -19,7 +19,7 @@ cookies = {
 }
 
 headers = {
-    "Token": 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjI1LCJ3ZWIiOiJncm91cHRlbiIsIm5hbWUiOiJyb290IiwiaXNBZG1pbiI6ZmFsc2UsImV4cCI6MTU3Njc1NjAzMSwiaWF0IjoxNTc2MTUxMjMxfQ.VkGwJbnohxGwM6ojlM3T0z-1h5y3RHZ7CFdCoZZq1Hk'
+    "Token": 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjI1LCJ3ZWIiOiJncm91cHRlbiIsIm5hbWUiOiJyb290IiwiaXNBZG1pbiI6ZmFsc2UsImV4cCI6MTU3NzY5NDA1MiwiaWF0IjoxNTc3MDg5MjUyfQ.tsKks2kmQQUlrvIqXyK1v0cAOTBUfZPc_D-5oeVuJis'
 }
 
 ua_headers = {
